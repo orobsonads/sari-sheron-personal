@@ -35,7 +35,8 @@
     a { text-decoration: none; color: inherit; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     /* URGENCY BAR */
-    #urgency-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--rose); color: var(--white); font-size: 13px; font-weight: 600; text-align: center; padding: 8px 16px; letter-spacing: 0.3px; }
+    #urgency-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--rose); color: var(--white); font-size: 13px; font-weight: 600; text-align: center; padding: 8px 16px; letter-spacing: 0.3px; line-height: 1.35; }
+    #urgency-bar .ub-short { display: none; }
     /* HERO */
     #hero { background: var(--dark); color: var(--white); padding: 80px 0 64px; position: relative; overflow: hidden; }
     .hero-inner { display: grid; grid-template-columns: 1fr 400px; grid-template-rows: auto auto; column-gap: 48px; row-gap: 0; align-items: start; }
@@ -225,6 +226,15 @@
       .steps-row::before { display: none; }
       .hero-numbers { gap: 20px; }
     }
+    @media (max-width: 600px) {
+      /* Barra fixa: encurta o texto e reserva a altura certa para não cobrir o hero */
+      body { padding-top: 56px; }
+      #urgency-bar { font-size: 12px; padding: 8px 14px; }
+      #urgency-bar .ub-full { display: none; }
+      #urgency-bar .ub-short { display: inline; }
+      #hero { padding: 48px 0 48px; }
+      .btn-wa, .btn-wa-large { line-height: 1.3; }
+    }
     @media (max-width: 480px) {
       .hero-headline { font-size: 32px; }
       .check-grid { grid-template-columns: 1fr; }
@@ -241,7 +251,8 @@
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <div id="urgency-bar">
-  💛 Comunidade gratuita no WhatsApp &nbsp;·&nbsp; Conteúdo, dicas e amostra do Método Vida 7 &nbsp;·&nbsp; Para mulheres que querem resultado real
+  <span class="ub-full">💛 Comunidade gratuita no WhatsApp &nbsp;·&nbsp; Conteúdo, dicas e amostra do Método Vida 7 &nbsp;·&nbsp; Para mulheres que querem resultado real</span>
+  <span class="ub-short">💛 Comunidade gratuita no WhatsApp &nbsp;·&nbsp; Conteúdo e dicas da Sari</span>
 </div>
 <!-- HERO -->
 <section id="hero">
