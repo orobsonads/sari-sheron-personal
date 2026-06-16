@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -596,6 +595,157 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
     });
   });
+</script>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1526522198971992');
+fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+       src="https://www.facebook.com/tr?id=1526522198971992&ev=PageView&noscript=1"/>
+</noscript>
+<!-- EasyWidget Conversion Listener -->
+<script>
+  (function() {
+    var trustedOrigin = 'https://widgethub.replit.app';
+
+    // SECURITY: Capture specific parent window reference (not broadcast globally)
+    var parentWindow = window.parent !== window ? window.parent : null;
+
+    // The listener runs in the host page context, so it should accept the host origin
+    var hostOrigin = window.location.origin;
+
+    var isReady = false;
+    var pendingConversions = new Map(); // keyed by widgetId+transactionId
+    var processedTransactionIds = {};
+
+    // Signal ready after gtag/fbq LIBRARIES are fully loaded (not just stubs!)
+    function signalReady() {
+      var gtagReady = true;
+      var fbqReady = (typeof fbq === "function" && fbq.version);
+
+      if (gtagReady && fbqReady && !isReady) {
+        isReady = true;
+        console.log('[EasyWidget] Conversion tracking FULLY ready (libraries loaded), signaling widgets');
+
+        if (parentWindow) {
+          parentWindow.postMessage({ type: 'EASYWIDGET_READY', widgetId: '73349592-48fb-435a-90b9-1888395094e4' }, hostOrigin);
+        } else {
+          window.postMessage({ type: 'EASYWIDGET_READY', widgetId: '73349592-48fb-435a-90b9-1888395094e4' }, hostOrigin);
+        }
+
+        pendingConversions.forEach(function(conversion, key) {
+          processConversion(conversion);
+          pendingConversions.delete(key);
+        });
+      }
+    }
+
+    var readyCheckInterval = setInterval(function() {
+      signalReady();
+      if (isReady) clearInterval(readyCheckInterval);
+    }, 100);
+
+    setTimeout(signalReady, 500);
+    setTimeout(signalReady, 1000);
+    setTimeout(signalReady, 2000);
+
+    setTimeout(function() {
+      if (!isReady) {
+        var gtagStub = typeof gtag === 'function';
+        var gtagLib = window.gtagLibraryLoaded === true;
+        var fbqLoaded = typeof fbq === 'function' && fbq.version;
+        console.warn('[EasyWidget] DIAGNOSTIC: Tracking libraries may be blocked or slow to load');
+        console.warn('[EasyWidget] gtag stub exists:', gtagStub, '| gtag library loaded:', gtagLib);
+        console.warn('[EasyWidget] fbq loaded:', fbqLoaded);
+        if (gtagStub && !gtagLib) {
+          console.error('[EasyWidget] WARNING: Google Ads gtag.js script did NOT load!');
+        }
+      }
+    }, 5000);
+
+    function processConversion(event) {
+      var transactionId = event.data.transactionId;
+      var pendingKey = event.data.widgetId + '_' + transactionId;
+
+      if (transactionId && processedTransactionIds[transactionId]) {
+        pendingConversions.delete(pendingKey);
+        return;
+      }
+
+      if (transactionId) {
+        processedTransactionIds[transactionId] = true;
+        pendingConversions.delete(pendingKey);
+        var keys = Object.keys(processedTransactionIds);
+        if (keys.length > 100) delete processedTransactionIds[keys[0]];
+      }
+
+      if (event.data.shouldTrackGoogleAds && typeof gtag === 'function') {
+        if (!window.gtagLibraryLoaded) {
+          console.warn('[EasyWidget] Google Ads stub exists but library not loaded - conversion may not be sent!');
+        }
+        var conversionParams = {
+          'send_to': 'undefined/undefined',
+          'value': 1.0,
+          'currency': 'BRL'
+        };
+        if (transactionId) conversionParams.transaction_id = transactionId;
+        gtag('event', 'conversion', conversionParams);
+      }
+
+      if (event.data.shouldTrackMetaPixel && typeof fbq === 'function') {
+        var pixelParams = {};
+        if (event.data.fbclid) pixelParams.fbclid = event.data.fbclid;
+        var pixelOptions = {};
+        if (event.data.metaEventId) pixelOptions.eventID = event.data.metaEventId;
+        fbq('track', 'Lead', pixelParams, pixelOptions);
+      }
+
+      try {
+        if (parentWindow && event.source === parentWindow) {
+          parentWindow.postMessage({ type: 'EASYWIDGET_CONVERSION_ACK', widgetId: '73349592-48fb-435a-90b9-1888395094e4', transactionId: transactionId }, hostOrigin);
+        } else if (!parentWindow) {
+          window.postMessage({ type: 'EASYWIDGET_CONVERSION_ACK', widgetId: '73349592-48fb-435a-90b9-1888395094e4', transactionId: transactionId }, hostOrigin);
+        }
+      } catch (e) { console.error('[EasyWidget] Failed to send ACK:', e); }
+    }
+
+    window.addEventListener('message', function(event) {
+      var isSameWindow = event.source === window;
+      var isFromParent = parentWindow && event.source === parentWindow;
+      if (!isSameWindow && !isFromParent) return;
+      var isTrustedOrigin = event.origin === hostOrigin || event.origin === window.location.origin || event.origin === '';
+      if (!isTrustedOrigin) return;
+      if (!event.data || event.data.type !== 'EASYWIDGET_CONVERSION') return;
+      if (event.data.widgetId !== '73349592-48fb-435a-90b9-1888395094e4') return;
+      var pendingKey = event.data.widgetId + '_' + event.data.transactionId;
+      if (!isReady) {
+        pendingConversions.set(pendingKey, event);
+      } else {
+        processConversion(event);
+      }
+    });
+  })();
+</script>
+<!-- EasyWidget Heatmap Tracker -->
+<script>
+  if (!window.__EW_HEATMAP_ACTIVE && !window.EasyWidgetHeatmap) {
+    window.EasyWidgetHeatmap = { widgetId: '73349592-48fb-435a-90b9-1888395094e4', baseUrl: 'https://widgethub.replit.app' };
+  }
+</script>
+<script src="https://widgethub.replit.app/heatmap-tracker.js" async></script>
+<!-- EasyWidget Widget -->
+<script>
+!function(){console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] STARTING');var w='73349592-48fb-435a-90b9-1888395094e4',b='https://widgethub.replit.app',p='wh-'+w+'-'+Math.random().toString(36).substr(2,9),d=document.createElement('div');d.id=p;d.setAttribute('data-widgethub-placeholder',w);d.style.cssText='display:block!important;width:100%!important;min-height:1px!important;';function r(){console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] REGISTERING');window.EasyWidgetRegistry=window.EasyWidgetRegistry||[];window.EasyWidgetRegistry.push({placeholderId:p,widgetId:w,baseUrl:b,rendered:false});console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] REGISTERED - Total:',window.EasyWidgetRegistry.length);if(!window.EasyWidgetLoaderInitialized&&!document.querySelector('script[src="'+b+'/widget-embed.js"]')){console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] LOADING SCRIPT');window.EasyWidgetLoaderInitialized=true;var s=document.createElement('script');s.src=b+'/widget-embed.js';s.async=true;s.setAttribute('data-widgethub-loader','true');s.onload=function(){console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] SCRIPT LOADED')};s.onerror=function(){console.error('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] SCRIPT ERROR')};document.head.appendChild(s)}else if(window.EasyWidgetLoaderReady){console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] CALLING PROCESS');window.processEasyWidgets&&window.processEasyWidgets()}}var c=document.currentScript;if(c&&c.parentNode){console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] PATH: INLINE');c.parentNode.insertBefore(d,c);r()}else{console.log('[EasyWidget-73349592-48fb-435a-90b9-1888395094e4] PATH: FALLBACK');(function i(){if(document.body){document.body.appendChild(d);r()}else setTimeout(i,10)})()}}();
 </script>
 </body>
 </html>
