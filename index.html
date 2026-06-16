@@ -741,5 +741,21 @@ fbq('track', 'PageView');
 <script>
 !function(){var w='73349592-48fb-435a-90b9-1888395094e4',b='https://widgethub.replit.app',p='wh-'+w+'-'+Math.random().toString(36).substr(2,9),d=document.createElement('div');d.id=p;d.style.cssText='display:none!important;';function r(){window.EasyWidgetRegistry=window.EasyWidgetRegistry||[];window.EasyWidgetRegistry.push({placeholderId:p,widgetId:w,baseUrl:b,rendered:false,hideButton:true});if(!window.EasyWidgetLoaderInitialized&&!document.querySelector('script[src="'+b+'/widget-embed.js"]')){window.EasyWidgetLoaderInitialized=true;var s=document.createElement('script');s.src=b+'/widget-embed.js';s.async=true;s.setAttribute('data-widgethub-loader','true');document.head.appendChild(s)}else if(window.EasyWidgetLoaderReady){window.processEasyWidgets&&window.processEasyWidgets()}}var c=document.currentScript;if(c&&c.parentNode){c.parentNode.insertBefore(d,c);r()}else{(function i(){if(document.body){document.body.appendChild(d);r()}else setTimeout(i,10)})()}}();
 </script>
+<!-- EasyWidget — Acionar modal nos botões de WhatsApp (com fallback para o link wa.me) -->
+<script>
+(function () {
+  var W = '73349592-48fb-435a-90b9-1888395094e4';
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest && e.target.closest('.easywidget-open-' + W);
+    if (!el) return;
+    var opener = window.EasyWidgetOpeners && window.EasyWidgetOpeners[W];
+    if (typeof opener === 'function') {
+      e.preventDefault();
+      opener();
+    }
+    // Se o widget não tiver carregado, não previne o padrão: o link wa.me continua funcionando.
+  }, true);
+})();
+</script>
 </body>
 </html>
